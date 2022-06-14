@@ -1,3 +1,8 @@
+.idea
+/target/
+/translatorDbApp/target/
+/translatorDesktopApp/target/
+
 # Compiled class file
 *.class
 
