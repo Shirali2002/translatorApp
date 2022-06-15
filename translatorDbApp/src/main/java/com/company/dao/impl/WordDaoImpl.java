@@ -22,10 +22,12 @@ public class WordDaoImpl extends AbstractDao implements WordDaoInter {
 
     public Word getWord(ResultSet rs) throws Exception{
         int id = rs.getInt("id");
+        int azeId = rs.getInt("aze_id");
+        int engId = rs.getInt("eng_id");
         String aze = rs.getString("aze");
         String eng = rs.getString("eng");
 
-        return new Word(id, aze, eng);
+        return new Word(id, azeId, engId, aze, eng);
 
     }
 
@@ -33,7 +35,12 @@ public class WordDaoImpl extends AbstractDao implements WordDaoInter {
     public ArrayList<Word> getAllWords() {
         ArrayList<Word> result = new ArrayList<>();
         try (Connection c = connection()){
-            PreparedStatement stmt = c.prepareStatement("SELECT w.id , w.aze , w.eng FROM `words` w");
+            PreparedStatement stmt = c.prepareStatement("SELECT ae.*,  " +
+                    " a.word AS aze,  " +
+                    " e.word AS eng  " +
+                    "FROM `aze_eng` ae " +
+                    " LEFT JOIN `aze` a ON a.id = ae.aze_id " +
+                    " LEFT JOIN `eng` e ON e.id = ae.eng_id");
             stmt.execute();
             ResultSet rs = stmt.getResultSet();
 
@@ -49,16 +56,72 @@ public class WordDaoImpl extends AbstractDao implements WordDaoInter {
     }
 
     @Override
-    public Word getWordById(int id) {
+    public Word getWordByAzeEngId(int id) {
         Word result = null;
         try (Connection c = connection()){
-            PreparedStatement stmt = c.prepareStatement("SELECT w.id , w.aze , w.eng FROM `words` w WHERE w.id=?");
+            PreparedStatement stmt = c.prepareStatement("SELECT ae.*,  " +
+                    " a.word AS aze,  " +
+                    " e.word AS eng  " +
+                    "FROM `aze_eng` ae " +
+                    " LEFT JOIN `aze` a ON a.id = ae.aze_id " +
+                    " LEFT JOIN `eng` e ON e.id = ae.eng_id " +
+                    " WHERE ae.id = ?");
             stmt.setInt(1, id);
             stmt.execute();
             ResultSet rs = stmt.getResultSet();
 
             while (rs.next()){
                 result = getWord(rs);
+            }
+
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public ArrayList getWordByAzeId(int id) {
+        ArrayList<Word> result = new ArrayList<>();
+        try (Connection c = connection()){
+            PreparedStatement stmt = c.prepareStatement("SELECT ae.*,  " +
+                    " a.word AS aze,  " +
+                    " e.word AS eng  " +
+                    "FROM `aze_eng` ae " +
+                    " LEFT JOIN `aze` a ON a.id = ae.aze_id " +
+                    " LEFT JOIN `eng` e ON e.id = ae.eng_id " +
+                    " WHERE a.id = ?");
+            stmt.setInt(1, id);
+            stmt.execute();
+            ResultSet rs = stmt.getResultSet();
+
+            while (rs.next()){
+                result.add(getWord(rs));
+            }
+
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public ArrayList getWordByEngId(int id) {
+        ArrayList<Word> result = new ArrayList<>();
+        try (Connection c = connection()){
+            PreparedStatement stmt = c.prepareStatement("SELECT ae.*,  " +
+                    " a.word AS aze,  " +
+                    " e.word AS eng  " +
+                    "FROM `aze_eng` ae " +
+                    " LEFT JOIN `aze` a ON a.id = ae.aze_id " +
+                    " LEFT JOIN `eng` e ON e.id = ae.eng_id " +
+                    " WHERE e.id = ?");
+            stmt.setInt(1, id);
+            stmt.execute();
+            ResultSet rs = stmt.getResultSet();
+
+            while (rs.next()){
+                result.add(getWord(rs));
             }
 
         } catch (Exception ex){

@@ -15,7 +15,11 @@ import java.util.List;
  */
 public interface WordDaoInter {
     public ArrayList<Word> getAllWords();
-    public Word getWordById(int id);
+    public Word getWordByAzeEngId(int id);
+    public ArrayList getWordByAzeId(int id);
+    public ArrayList getWordByEngId(int id);
+
+
     public boolean removeWord(int id);
     public boolean updateWord(Word word);
     public boolean addWord(Word word);

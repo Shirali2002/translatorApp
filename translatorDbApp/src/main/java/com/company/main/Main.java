@@ -15,12 +15,12 @@ import java.util.ArrayList;
  */
 public class Main {
     public static void main(String[] args) {
-//        WordDaoInter wordDao = Context.instanceWordDao();
-//        ArrayList<Word> wordList = wordDao.getAllWords();
-//
-//        for (Word word: wordList) {
-//            System.out.println(word);
-//        }
+        WordDaoInter wordDao = Context.instanceWordDao();
+        ArrayList<Word> wordList = wordDao.
+
+        for (Word word: wordList) {
+            System.out.println(word);
+        }
 
     }
     
