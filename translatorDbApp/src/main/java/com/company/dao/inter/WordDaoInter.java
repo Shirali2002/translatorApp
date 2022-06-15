@@ -19,8 +19,13 @@ public interface WordDaoInter {
     public ArrayList getWordByAzeId(int id);
     public ArrayList getWordByEngId(int id);
 
+    public boolean removeWordByAzeEngId(int id);
+    public boolean removeWordByAzeId(int id);
+    public boolean removeWordByEngId(int id);
+    public boolean removeWordByAzeWord(String word);
+    public boolean removeWordByEngWord(String word);
 
-    public boolean removeWord(int id);
+
     public boolean updateWord(Word word);
     public boolean addWord(Word word);
 

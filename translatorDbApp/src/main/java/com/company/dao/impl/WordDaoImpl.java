@@ -132,18 +132,67 @@ public class WordDaoImpl extends AbstractDao implements WordDaoInter {
     }
 
     @Override
-    public boolean removeWord(int id) {
+    public boolean removeWordByAzeEngId(int id) {
         try (Connection c = connection()){
-            PreparedStatement stmt = c.prepareStatement("DELETE FROM `words` w WHERE w.id=?");
+            PreparedStatement stmt = c.prepareStatement("DELETE FROM `aze_eng` ae WHERE ae.id = ?");
             stmt.setInt(1, id);
-
             return stmt.execute();
-
         } catch (Exception ex){
             ex.printStackTrace();
             return false;
         }
+    }
 
+    @Override
+    public boolean removeWordByAzeId(int id) {
+        try (Connection c = connection()){
+            PreparedStatement stmt = c.prepareStatement("DELETE ae, a FROM `aze_eng` ae INNER JOIN `aze` a WHERE ae.aze_id = ? AND a.id = ?");
+            stmt.setInt(1, id);
+            stmt.setInt(2, id);
+            return stmt.execute();
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean removeWordByEngId(int id) {
+        try (Connection c = connection()){
+            PreparedStatement stmt = c.prepareStatement("DELETE ae, e FROM `aze_eng` ae INNER JOIN `eng` e WHERE ae.eng_id = ? AND e.id = ?");
+            stmt.setInt(1, id);
+            stmt.setInt(2, id);
+            return stmt.execute();
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean removeWordByEngWord(String word) {
+        try (Connection c = connection()){
+            PreparedStatement stmt = c.prepareStatement("DELETE ae, e FROM `aze_eng` ae INNER JOIN `eng` e WHERE ae.eng_id = ( SELECT e.id WHERE e.word = ? ) AND e.word = ?");
+            stmt.setString(1, word);
+            stmt.setString(2, word);
+            return stmt.execute();
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean removeWordByAzeWord(String word) {
+        try (Connection c = connection()){
+            PreparedStatement stmt = c.prepareStatement("DELETE ae, a FROM `aze_eng` ae INNER JOIN `aze` a WHERE ae.aze_id = ( SELECT a.id WHERE a.word = ? ) AND a.word = ?");
+            stmt.setString(1, word);
+            stmt.setString(2, word);
+            return stmt.execute();
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     @Override
