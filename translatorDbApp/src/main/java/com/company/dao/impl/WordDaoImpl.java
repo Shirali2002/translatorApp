@@ -4,8 +4,8 @@
  */
 package com.company.dao.impl;
 
-import com.company.dao.inter.abstractDao;
-import com.company.dao.inter.wordDaoInter;
+import com.company.dao.inter.AbstractDao;
+import com.company.dao.inter.WordDaoInter;
 import com.company.entity.Word;
 
 import java.sql.Connection;
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Shireli
  */
-public class wordDaoImpl extends abstractDao implements wordDaoInter {
+public class WordDaoImpl extends AbstractDao implements WordDaoInter {
 
     public Word getWord(ResultSet rs) throws Exception{
         int id = rs.getInt("id");
@@ -30,7 +30,7 @@ public class wordDaoImpl extends abstractDao implements wordDaoInter {
     }
 
     @Override
-    public List<Word> getAllWords() {
+    public ArrayList<Word> getAllWords() {
         ArrayList<Word> result = new ArrayList<>();
         try (Connection c = connection()){
             PreparedStatement stmt = c.prepareStatement("SELECT w.id , w.aze , w.eng FROM `words` w");
@@ -85,11 +85,32 @@ public class wordDaoImpl extends abstractDao implements wordDaoInter {
 
     @Override
     public boolean updateWord(Word word) {
-        return false;
+        try (Connection c = connection()){
+            PreparedStatement stmt = c.prepareStatement("UPDATE words set aze=?, eng=? WHERE id=?");
+            stmt.setString(1, word.getAze());
+            stmt.setString(2, word.getEng());
+            stmt.setInt(3, word.getId());
+
+            return stmt.execute();
+
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean addWord(Word word) {
-        return false;
+        try (Connection c = connection()){
+            PreparedStatement stmt = c.prepareStatement("INSERT words set aze=?, eng=?");
+            stmt.setString(1, word.getAze());
+            stmt.setString(2, word.getEng());
+
+            return stmt.execute();
+
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
     }
 }

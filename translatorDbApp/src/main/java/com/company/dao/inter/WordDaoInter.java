@@ -6,14 +6,15 @@ package com.company.dao.inter;
 
 import com.company.entity.Word;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author Shireli
  */
-public interface wordDaoInter {
-    public List<Word> getAllWords();
+public interface WordDaoInter {
+    public ArrayList<Word> getAllWords();
     public Word getWordById(int id);
     public boolean removeWord(int id);
     public boolean updateWord(Word word);

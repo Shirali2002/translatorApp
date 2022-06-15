@@ -4,10 +4,24 @@
  */
 package com.company.main;
 
+import com.company.dao.inter.WordDaoInter;
+import com.company.entity.Word;
+
+import java.util.ArrayList;
+
 /**
  *
  * @author Shireli
  */
 public class Main {
+    public static void main(String[] args) {
+        WordDaoInter wordDao = Context.instanceWordDao();
+        ArrayList<Word> wordList = wordDao.getAllWords();
+
+        for (Word word: wordList) {
+            System.out.println(word);
+        }
+
+    }
     
 }
