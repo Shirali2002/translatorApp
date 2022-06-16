@@ -81,7 +81,48 @@ public class WordDaoImpl extends AbstractDao implements WordDaoInter {
         return result;
     }
 
-    public ArrayList getWordByAzeId(int id) {
+    @Override
+    public ArrayList<Integer> getAEIdByAzeId(int id){
+        ArrayList<Integer> result = new ArrayList<>();
+        try (Connection c = connection()){
+            PreparedStatement stmt = c.prepareStatement("SELECT id FROM aze_eng where aze_id = ?");
+            stmt.setInt(1, id);
+            stmt.execute();
+            ResultSet rs = stmt.getResultSet();
+
+            while (rs.next()){
+                result.add(rs.getInt("id"));
+            }
+
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return result;
+    }
+
+    @Override
+    public ArrayList<Integer> getAEIdByEngId(int id){
+        ArrayList<Integer> result = new ArrayList<>();
+        try (Connection c = connection()){
+            PreparedStatement stmt = c.prepareStatement("SELECT id FROM aze_eng where eng_id = ?");
+            stmt.setInt(1, id);
+            stmt.execute();
+            ResultSet rs = stmt.getResultSet();
+
+            while (rs.next()){
+                result.add(rs.getInt("id"));
+            }
+
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+
+        return result;
+    }
+
+    @Override
+    public ArrayList<Word> getWordByAzeId(int id) {
         ArrayList<Word> result = new ArrayList<>();
         try (Connection c = connection()){
             PreparedStatement stmt = c.prepareStatement("SELECT ae.*,  " +
@@ -106,7 +147,8 @@ public class WordDaoImpl extends AbstractDao implements WordDaoInter {
         return result;
     }
 
-    public ArrayList getWordByEngId(int id) {
+    @Override
+    public ArrayList<Word> getWordByEngId(int id) {
         ArrayList<Word> result = new ArrayList<>();
         try (Connection c = connection()){
             PreparedStatement stmt = c.prepareStatement("SELECT ae.*,  " +
@@ -129,100 +171,5 @@ public class WordDaoImpl extends AbstractDao implements WordDaoInter {
         }
 
         return result;
-    }
-
-    @Override
-    public boolean removeWordByAzeEngId(int id) {
-        try (Connection c = connection()){
-            PreparedStatement stmt = c.prepareStatement("DELETE FROM `aze_eng` ae WHERE ae.id = ?");
-            stmt.setInt(1, id);
-            return stmt.execute();
-        } catch (Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean removeWordByAzeId(int id) {
-        try (Connection c = connection()){
-            PreparedStatement stmt = c.prepareStatement("DELETE ae, a FROM `aze_eng` ae INNER JOIN `aze` a WHERE ae.aze_id = ? AND a.id = ?");
-            stmt.setInt(1, id);
-            stmt.setInt(2, id);
-            return stmt.execute();
-        } catch (Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean removeWordByEngId(int id) {
-        try (Connection c = connection()){
-            PreparedStatement stmt = c.prepareStatement("DELETE ae, e FROM `aze_eng` ae INNER JOIN `eng` e WHERE ae.eng_id = ? AND e.id = ?");
-            stmt.setInt(1, id);
-            stmt.setInt(2, id);
-            return stmt.execute();
-        } catch (Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean removeWordByEngWord(String word) {
-        try (Connection c = connection()){
-            PreparedStatement stmt = c.prepareStatement("DELETE ae, e FROM `aze_eng` ae INNER JOIN `eng` e WHERE ae.eng_id = ( SELECT e.id WHERE e.word = ? ) AND e.word = ?");
-            stmt.setString(1, word);
-            stmt.setString(2, word);
-            return stmt.execute();
-        } catch (Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean removeWordByAzeWord(String word) {
-        try (Connection c = connection()){
-            PreparedStatement stmt = c.prepareStatement("DELETE ae, a FROM `aze_eng` ae INNER JOIN `aze` a WHERE ae.aze_id = ( SELECT a.id WHERE a.word = ? ) AND a.word = ?");
-            stmt.setString(1, word);
-            stmt.setString(2, word);
-            return stmt.execute();
-        } catch (Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean updateWord(Word word) {
-        try (Connection c = connection()){
-            PreparedStatement stmt = c.prepareStatement("UPDATE words set aze=?, eng=? WHERE id=?");
-            stmt.setString(1, word.getAze());
-            stmt.setString(2, word.getEng());
-            stmt.setInt(3, word.getId());
-
-            return stmt.execute();
-
-        } catch (Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    @Override
-    public boolean addWord(Word word) {
-        try (Connection c = connection()){
-            PreparedStatement stmt = c.prepareStatement("INSERT words set aze=?, eng=?");
-            stmt.setString(1, word.getAze());
-            stmt.setString(2, word.getEng());
-
-            return stmt.execute();
-
-        } catch (Exception ex){
-            ex.printStackTrace();
-            return false;
-        }
     }
 }
