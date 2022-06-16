@@ -3,7 +3,6 @@ package com.company.dao.impl;
 import com.company.dao.inter.AbstractDao;
 import com.company.dao.inter.AzeDaoInter;
 import com.company.entity.Aze;
-import com.company.entity.Word;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -93,9 +92,9 @@ public class AzeDaoImpl extends AbstractDao implements AzeDaoInter {
     @Override
     public boolean updateWord(Aze azeWord) {
         try (Connection c = connection()) {
-            PreparedStatement stmt = c.prepareStatement("DELETE ae, a FROM `aze_eng` ae INNER JOIN `aze` a WHERE ae.aze_id = ? AND a.id = ?");
-            stmt.setInt(1, id);
-            stmt.setInt(2, id);
+            PreparedStatement stmt = c.prepareStatement("UPDATE `aze` a SET a.word = ? WHERE a.id = ?");
+            stmt.setString(1, azeWord.getWord());
+            stmt.setInt(2, azeWord.getId());
             return stmt.execute();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -105,6 +104,13 @@ public class AzeDaoImpl extends AbstractDao implements AzeDaoInter {
 
     @Override
     public boolean addWord(Aze azeWord) {
-        return false;
+        try (Connection c = connection()) {
+            PreparedStatement stmt = c.prepareStatement("INSERT INTO `aze` (word) VALUES(?)");
+            stmt.setString(1, azeWord.getWord());
+            return stmt.execute();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 }
