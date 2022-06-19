@@ -4,23 +4,31 @@
  */
 package com.company.panel;
 
+import com.company.dao.inter.AzeEngDaoInter;
+import com.company.dao.inter.WordDaoInter;
+import com.company.entity.Word;
+import com.company.main.Context;
+
 /**
- *
  * @author Shireli
  */
 public class AzeToEngPanel extends javax.swing.JPanel {
+
+    private AzeEngDaoInter azeEngDao = Context.instanceAzeEngDao();
+    private WordDaoInter wordDao = Context.instanceWordDao();
+    private Word word = null;
 
     /**
      * Creates new form AzeToEngPanel
      */
     public AzeToEngPanel() {
         initComponents();
+        refreshWord();
     }
 
-    public void correctAnswer() {
+//    public void correctAnswer() {
 //        lblCorrect.
-    }
-
+//    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,8 +41,10 @@ public class AzeToEngPanel extends javax.swing.JPanel {
         lblAze = new javax.swing.JLabel();
         lblEng = new javax.swing.JLabel();
         txtAze = new javax.swing.JTextField();
+        btnCheck = new javax.swing.JButton();
+        lblWarning = new javax.swing.JLabel();
+        btnRefresh = new javax.swing.JButton();
         txtEng = new javax.swing.JTextField();
-        btnTranslate = new javax.swing.JButton();
 
         lblAze.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         lblAze.setText("Azerbaijan:");
@@ -43,50 +53,110 @@ public class AzeToEngPanel extends javax.swing.JPanel {
         lblEng.setText("English:");
 
         txtAze.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        txtAze.setText("enter the word");
+        txtAze.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtAzeActionPerformed(evt);
+            }
+        });
+
+        btnCheck.setText("Check");
+        btnCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCheckActionPerformed(evt);
+            }
+        });
+
+        lblWarning.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        lblWarning.setForeground(new java.awt.Color(247, 5, 5));
+        lblWarning.setText("You have 3 chance to find correct word");
+
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
 
         txtEng.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-
-        btnTranslate.setText("translate");
+        txtEng.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEngActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblAze, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblEng))
-                .addGap(81, 81, 81)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtEng)
-                    .addComponent(txtAze))
-                .addGap(57, 57, 57)
-                .addComponent(btnTranslate)
-                .addContainerGap(80, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(109, 109, 109)
+                                                .addComponent(lblWarning))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(55, 55, 55)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(lblAze, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(lblEng))
+                                                .addGap(81, 81, 81)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(txtAze, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(txtEng, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(54, 54, 54)
+                                                                .addComponent(btnCheck, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(40, 40, 40)
+                                                                .addComponent(btnRefresh)))))
+                                .addContainerGap(74, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAze)
-                    .addComponent(txtAze, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(68, 68, 68)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEng)
-                    .addComponent(txtEng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTranslate))
-                .addContainerGap(233, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(lblWarning)
+                                .addGap(53, 53, 53)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblAze)
+                                        .addComponent(txtAze, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(68, 68, 68)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblEng)
+                                        .addComponent(btnCheck)
+                                        .addComponent(btnRefresh)
+                                        .addComponent(txtEng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(173, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtAzeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAzeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAzeActionPerformed
+
+    private void txtEngActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEngActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEngActionPerformed
+
+    private void btnCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCheckActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        refreshWord();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void refreshWord() {
+        int randomId = azeEngDao.randomIdGenerator();
+        word = wordDao.getWordByAzeEngId(randomId);
+        txtAze.setText(word.getAze());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnTranslate;
+    private javax.swing.JButton btnCheck;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JLabel lblAze;
     private javax.swing.JLabel lblEng;
+    private javax.swing.JLabel lblWarning;
     private javax.swing.JTextField txtAze;
     private javax.swing.JTextField txtEng;
     // End of variables declaration//GEN-END:variables
