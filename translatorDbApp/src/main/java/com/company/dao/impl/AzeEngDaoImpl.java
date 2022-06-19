@@ -95,4 +95,29 @@ public class AzeEngDaoImpl extends AbstractDao implements AzeEngDaoInter {
             return false;
         }
     }
+
+    @Override
+    public int randomIdGenerator() {
+        int maxId = -1;
+        int minId = -1;
+        try (Connection c = connection()) {
+            PreparedStatement stmt = c.prepareStatement("SELECT MAX(id) as max, MIN(id) as min FROM `aze_eng`");
+            stmt.execute();
+            ResultSet rs = stmt.getResultSet();
+            while (rs.next()){
+                maxId = rs.getInt("max");
+                minId = rs.getInt("min");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        int randomNumber = minId+(int)(Math.random()*maxId);
+
+        if (getAzeEngById(randomNumber) == null){
+            return randomIdGenerator();
+        }else {
+            return randomNumber;
+        }
+    }
 }

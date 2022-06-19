@@ -10,4 +10,5 @@ public interface AzeEngDaoInter {
     public boolean removeAzeEng(int id);
     public boolean updateAzeEng(AzeEng azeEng);
     public boolean addAzeEng(AzeEng azeEng);
+    public int randomIdGenerator();
 }

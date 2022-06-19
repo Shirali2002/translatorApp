@@ -4,6 +4,7 @@
  */
 package com.company.main;
 
+import com.company.dao.inter.AzeEngDaoInter;
 import com.company.dao.inter.WordDaoInter;
 import com.company.entity.Word;
 
@@ -21,6 +22,13 @@ public class Main {
 //        for (Word word: wordList) {
 //            System.out.println(word);
 //        }
+
+        AzeEngDaoInter azeEngDao = Context.instanceAzeEngDao();
+        while (true) {
+            int n = azeEngDao.randomIdGenerator();
+            System.out.println(n);
+            System.out.println(azeEngDao.getAzeEngById(n));
+        }
 
     }
     
