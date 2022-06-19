@@ -4,11 +4,22 @@
  */
 package com.company.main;
 
+import com.company.dao.inter.AzeEngDaoInter;
+import com.company.dao.inter.WordDaoInter;
+import com.company.entity.Word;
+
+import java.util.Timer;
+
 /**
- *
  * @author Shireli
  */
 public class MainUser extends javax.swing.JFrame {
+
+    private AzeEngDaoInter azeEngDao = Context.instanceAzeEngDao();
+    private WordDaoInter wordDao = Context.instanceWordDao();
+    private Word word = null;
+
+    private int checkCount = 3;
 
     /**
      * Creates new form MainUser
@@ -26,34 +37,154 @@ public class MainUser extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tabbedPane = new javax.swing.JTabbedPane();
-        tpAzeToEng = new com.company.panel.AzeToEngPanel();
-        tpEngToAze = new com.company.panel.EngToAzePanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        pnlATE = new javax.swing.JPanel();
+        btnATERefresh = new javax.swing.JButton();
+        txtATEEng = new javax.swing.JTextField();
+        lblATEAze = new javax.swing.JLabel();
+        lblATEEng = new javax.swing.JLabel();
+        txtATEAze = new javax.swing.JTextField();
+        btnATECheck = new javax.swing.JButton();
+        lblATEWarning = new javax.swing.JLabel();
+        pnlETA = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        tabbedPane.addTab("AZE TO ENG", tpAzeToEng);
-        tabbedPane.addTab("ENG TO AZE", tpEngToAze);
+        btnATERefresh.setText("Refresh");
+        btnATERefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnATERefreshActionPerformed(evt);
+            }
+        });
+
+        txtATEEng.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        txtATEEng.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtATEEngActionPerformed(evt);
+            }
+        });
+
+        lblATEAze.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        lblATEAze.setText("Azerbaijan:");
+
+        lblATEEng.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        lblATEEng.setText("English:");
+
+        txtATEAze.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        txtATEAze.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtATEAzeActionPerformed(evt);
+            }
+        });
+
+        btnATECheck.setText("Check");
+        btnATECheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnATECheckActionPerformed(evt);
+            }
+        });
+
+        lblATEWarning.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        lblATEWarning.setForeground(new java.awt.Color(0, 0, 0));
+        lblATEWarning.setText("Refresh to start.");
+
+        javax.swing.GroupLayout pnlATELayout = new javax.swing.GroupLayout(pnlATE);
+        pnlATE.setLayout(pnlATELayout);
+        pnlATELayout.setHorizontalGroup(
+                pnlATELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlATELayout.createSequentialGroup()
+                                .addGroup(pnlATELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(pnlATELayout.createSequentialGroup()
+                                                .addGap(109, 109, 109)
+                                                .addComponent(lblATEWarning))
+                                        .addGroup(pnlATELayout.createSequentialGroup()
+                                                .addGap(55, 55, 55)
+                                                .addGroup(pnlATELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(lblATEAze, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                                                        .addComponent(lblATEEng, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addGap(71, 71, 71)
+                                                .addGroup(pnlATELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(txtATEAze, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(pnlATELayout.createSequentialGroup()
+                                                                .addComponent(txtATEEng, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(54, 54, 54)
+                                                                .addComponent(btnATECheck, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(40, 40, 40)
+                                                                .addComponent(btnATERefresh)))))
+                                .addContainerGap(52, Short.MAX_VALUE))
+        );
+        pnlATELayout.setVerticalGroup(
+                pnlATELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlATELayout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(lblATEWarning)
+                                .addGap(53, 53, 53)
+                                .addGroup(pnlATELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblATEAze)
+                                        .addComponent(txtATEAze, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(68, 68, 68)
+                                .addGroup(pnlATELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lblATEEng)
+                                        .addComponent(btnATECheck)
+                                        .addComponent(btnATERefresh)
+                                        .addComponent(txtATEEng, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap(154, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Aze To Eng", pnlATE);
+
+        javax.swing.GroupLayout pnlETALayout = new javax.swing.GroupLayout(pnlETA);
+        pnlETA.setLayout(pnlETALayout);
+        pnlETALayout.setHorizontalGroup(
+                pnlETALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 639, Short.MAX_VALUE)
+        );
+        pnlETALayout.setVerticalGroup(
+                pnlETALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 396, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Eng To Aze", pnlETA);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jTabbedPane1)
+                                .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jTabbedPane1)
+                                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnATERefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnATERefreshActionPerformed
+        // TODO add your handling code here:
+        refreshWordATE();
+
+
+    }//GEN-LAST:event_btnATERefreshActionPerformed
+
+    private void txtATEEngActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtATEEngActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtATEEngActionPerformed
+
+    private void txtATEAzeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtATEAzeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtATEAzeActionPerformed
+
+    private void btnATECheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnATECheckActionPerformed
+        // TODO add your handling code here:
+        checkWordATE();
+    }//GEN-LAST:event_btnATECheckActionPerformed
 
     /**
      * @param args the command line arguments
@@ -62,7 +193,7 @@ public class MainUser extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -90,9 +221,70 @@ public class MainUser extends javax.swing.JFrame {
         });
     }
 
+    private void refreshWordATE() {
+        int randomId = azeEngDao.randomIdGenerator();
+        word = wordDao.getWordByAzeEngId(randomId);
+        txtATEAze.setText(word.getAze());
+        checkCount = 3;
+        lblWarningStart();
+    }
+
+    private void checkWordATE() {
+        try {
+            String enteredWord = txtATEEng.getText().toLowerCase();
+            String correctWord = word.getEng().toLowerCase();
+            if (enteredWord.equals(correctWord)) {
+                lblWarningCorrectAnswer();
+
+            } else {
+                checkCount--;
+
+                if (checkCount > 0) {
+                    lblWarningWrongAnswer();
+                } else if (checkCount == 0) {
+                    lblWarningNoChance();
+                }
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    private void lblWarningStart() {
+        lblATEWarning.setText(String.format("You have %s chance to find correct word", checkCount));
+        lblATEWarning.setForeground(new java.awt.Color(247, 5, 5));
+        btnATECheck.setVisible(true);
+    }
+
+    private void lblWarningWrongAnswer() {
+        lblATEWarning.setText(String.format("Wrong answer! You have %s chance to find correct word", checkCount));
+        lblATEWarning.setForeground(new java.awt.Color(247, 5, 5));
+    }
+
+    private void lblWarningCorrectAnswer() {
+        lblATEWarning.setText("Congrulations!!! Correct Answer. Refresh for next word.");
+        lblATEWarning.setForeground(new java.awt.Color(27, 228, 24));
+        btnATECheck.setVisible(false);
+    }
+
+    private void lblWarningNoChance() {
+        lblATEWarning.setText("You have no chance. Please try again.");
+        lblATEWarning.setForeground(new java.awt.Color(247, 5, 5));
+        btnATECheck.setVisible(false);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTabbedPane tabbedPane;
-    private com.company.panel.AzeToEngPanel tpAzeToEng;
-    private com.company.panel.EngToAzePanel tpEngToAze;
+    private javax.swing.JButton btnATECheck;
+    private javax.swing.JButton btnATERefresh;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel lblATEAze;
+    private javax.swing.JLabel lblATEEng;
+    private javax.swing.JLabel lblATEWarning;
+    private javax.swing.JPanel pnlATE;
+    private javax.swing.JPanel pnlETA;
+    private javax.swing.JTextField txtATEAze;
+    private javax.swing.JTextField txtATEEng;
     // End of variables declaration//GEN-END:variables
 }
